@@ -1,3 +1,4 @@
+package All;
 
 public final class IntegrityStatement {
     public static String signature() {

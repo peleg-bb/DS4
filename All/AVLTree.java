@@ -1,3 +1,5 @@
+package All;
+
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.ArrayList;
@@ -6,7 +8,7 @@ import java.util.Iterator;
 
 public class AVLTree implements Iterable<Integer> {
     // You may edit the following nested class:
-    public class Node {
+    protected class Node {
     	public Node left = null;
     	public Node right = null;
     	public Node parent = null;

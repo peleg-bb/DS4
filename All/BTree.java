@@ -1,3 +1,5 @@
+package All;
+
 import java.util.Arrays;
 import java.util.Comparator;
 
@@ -183,8 +185,7 @@ public class BTree<T extends Comparable<T>> {
         return node.getNumberOfKeys() == maxDegree - 1;
     }
 
-    public static class Node<T extends Comparable<T>> {
-
+    protected static class Node<T extends Comparable<T>> {
     	protected T[] keys = null;
     	protected int numOfKeys = 0;
     	protected Node<T>[] children = null;
