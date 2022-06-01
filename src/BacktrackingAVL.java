@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.List;
 
 public class BacktrackingAVL extends AVLTree {
@@ -5,6 +6,7 @@ public class BacktrackingAVL extends AVLTree {
     public BacktrackingAVL() {
         super();
     }
+
 
 	//You are to implement the function Backtrack.
     public void Backtrack() {
@@ -15,20 +17,21 @@ public class BacktrackingAVL extends AVLTree {
     
     //Change the list returned to a list of integers answering the requirements
     public static List<Integer> AVLTreeBacktrackingCounterExample() {
-        // You should remove the next two lines, after double-checking that the signature is valid!
-        IntegrityStatement.signature(); // Reminder!
-        throw new UnsupportedOperationException("You should implement this");
+        List<Integer> insertions =  new ArrayList<Integer>();
+        insertions.add(1);
+        insertions.add(2);
+        insertions.add(3);
+        return insertions;
     }
     
     public int Select(int index) {
-        // You should remove the next two lines, after double-checking that the signature is valid!
-        IntegrityStatement.signature(); // Reminder!
-        throw new UnsupportedOperationException("You should implement this");
+        if (root != null) {
+            return this.root.Select(index);
+        }
+        throw new IllegalArgumentException();
     }
-    
+
     public int Rank(int value) {
-        // You should remove the next two lines, after double-checking that the signature is valid!
-        IntegrityStatement.signature(); // Reminder!
-        throw new UnsupportedOperationException("You should implement this");
+         return this.root.Rank(value);
     }
 }
