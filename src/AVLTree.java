@@ -147,6 +147,7 @@ public class AVLTree implements Iterable<Integer> {
             node = rotateLeft(node);
         }
 
+
         return node;
     }
     
@@ -169,6 +170,8 @@ public class AVLTree implements Iterable<Integer> {
         
         y.updateHeight();
         x.updateHeight();
+        x.updateSize();
+        y.updateSize();
 
         // Return new root
         return x;
@@ -192,6 +195,8 @@ public class AVLTree implements Iterable<Integer> {
         
         x.updateHeight();
         y.updateHeight();
+        x.updateSize();
+        y.updateSize();
 
         // Return new root
         return y;
