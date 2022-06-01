@@ -6,7 +6,7 @@ import java.util.Iterator;
 
 public class AVLTree implements Iterable<Integer> {
     // You may edit the following nested class:
-    protected class Node {
+    public class Node {
     	public Node left = null;
     	public Node right = null;
     	public Node parent = null;

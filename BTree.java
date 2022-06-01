@@ -183,7 +183,7 @@ public class BTree<T extends Comparable<T>> {
         return node.getNumberOfKeys() == maxDegree - 1;
     }
 
-    protected static class Node<T extends Comparable<T>> {
+    public static class Node<T extends Comparable<T>> {
 
     	protected T[] keys = null;
     	protected int numOfKeys = 0;
