@@ -7,14 +7,21 @@ import java.util.Iterator;
 public class AVLTree implements Iterable<Integer> {
     // You may edit the following nested class:
     protected class Node {
-    	public Node left = null;
-    	public Node right = null;
-    	public Node parent = null;
-    	public int height = 0;
-    	public int value;
+        public Node left = null;
+        public Node right = null;
+        public Node parent = null;
+        public int height = 0;
+        public int value;
+        public int size = 0;
 
-    	public Node(int val) {
+        public Node(int val) {
             this.value = val;
+        }
+
+        protected void updateSize() {
+            int leftSize = (left == null) ? 0 : left.size;
+            int rightSize = (right == null) ? 0 : right.size;
+            height = leftSize + rightSize + 1;
         }
 
         public void updateHeight() {
@@ -30,7 +37,58 @@ public class AVLTree implements Iterable<Integer> {
 
             return leftHeight - rightHeight;
         }
+
+        public int Select(int index) {
+            int curr_rank = this.left.size + 1;
+            if (curr_rank == index) {
+                return this.value;
+            } else if (index < curr_rank) {
+                return this.left.Select(index);
+            } else { // Searching for the respective rank in the right subtree
+                return this.right.Select(index - curr_rank);
+            }
+        }
+
+        public int Rank(int value) {
+            if (this.value == value) {
+                return this.left.size + 1;
+            } else if (this.value < value) {
+                if (this.left == null) {
+                    return this.size;
+                } else {
+                    return this.left.Rank(value);
+                }
+            } else {
+                if (this.right == null) {
+                    return this.Rank(value);
+                } else {
+                    return (left == null) ? this.right.Rank(value) + 1 : this.right.Rank(value) + this.left.size + 1;
+                }
+
+            }
+        }
     }
+
+
+//                try {
+//                    return this.left.Rank(value);
+//                } catch (NullPointerException e) {
+//                    if (this.value < value) {
+//                        return this.size + 1;
+//                    } else return this.size;
+//                }
+//            }
+//            else {
+//                try {
+//                    return this.right.Rank(value);
+//                } catch (NullPointerException e) {
+//                    if (this.value < value) {
+//                        return this.size + 1;
+//                    } else return this.size;
+//                }
+//            }
+//        }
+
     
     protected Node root;
     
@@ -51,6 +109,7 @@ public class AVLTree implements Iterable<Integer> {
 	    // Perform regular BST insertion
         if (node == null) {
         	Node insertedNode = new Node(value);
+            insertedNode.size++;
             return insertedNode;
         }
 
@@ -64,6 +123,8 @@ public class AVLTree implements Iterable<Integer> {
         }
             
         node.updateHeight();
+        node.updateSize();
+
 
         /* 
          * Check For Imbalance, and fix according to the AVL-Tree Definition
@@ -296,3 +357,4 @@ public class AVLTree implements Iterable<Integer> {
         return new PreorderIterator(this.root);
     }
 }
+

@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.List;
 
 public class BacktrackingAVL extends AVLTree {
@@ -21,14 +22,13 @@ public class BacktrackingAVL extends AVLTree {
     }
     
     public int Select(int index) {
-        // You should remove the next two lines, after double-checking that the signature is valid!
-        IntegrityStatement.signature(); // Reminder!
-        throw new UnsupportedOperationException("You should implement this");
+        if (root != null) {
+            return this.root.Select(index);
+        }
+        throw new IllegalArgumentException();
     }
-    
+
     public int Rank(int value) {
-        // You should remove the next two lines, after double-checking that the signature is valid!
-        IntegrityStatement.signature(); // Reminder!
-        throw new UnsupportedOperationException("You should implement this");
+         return this.root.Rank(value);
     }
 }
