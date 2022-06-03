@@ -21,7 +21,7 @@ public class AVLTree implements Iterable<Integer> {
         protected void updateSize() {
             int leftSize = (left == null) ? 0 : left.size;
             int rightSize = (right == null) ? 0 : right.size;
-            height = leftSize + rightSize + 1;
+            size = leftSize + rightSize + 1;
         }
 
         public void updateHeight() {
@@ -39,7 +39,7 @@ public class AVLTree implements Iterable<Integer> {
         }
 
         public int Select(int index) {
-            int curr_rank = this.left.size + 1;
+            int curr_rank = (this.left == null) ? 1 : this.left.size + 1;
             if (curr_rank == index) {
                 return this.value;
             } else if (index < curr_rank) {
@@ -49,45 +49,49 @@ public class AVLTree implements Iterable<Integer> {
             }
         }
 
+
         public int Rank(int value) {
+            int leftSize = (left == null) ? 0 : left.size;
             if (this.value == value) {
-                return this.left.size + 1;
-            } else if (this.value < value) {
+                    return leftSize;
+                }
+            else if (this.value > value) {
                 if (this.left == null) {
-                    return this.size;
+                   return this.size - 1;
                 } else {
                     return this.left.Rank(value);
                 }
-            } else {
+            }
+            else {
                 if (this.right == null) {
-                    return this.Rank(value);
+                    return leftSize + 1;
                 } else {
-                    return (left == null) ? this.right.Rank(value) + 1 : this.right.Rank(value) + this.left.size + 1;
+                    return leftSize + 1 + this.right.Rank(value);
                 }
-
             }
         }
-    }
 
-
+    } // End of Class Node
+//
 //                try {
-//                    return this.left.Rank(value);
-//                } catch (NullPointerException e) {
-//                    if (this.value < value) {
-//                        return this.size + 1;
-//                    } else return this.size;
-//                }
-//            }
+//        return this.left.Rank(value);
+//    } catch (NullPointerException e) {
+//        if (this.value < value) {
+//            return this.size + 1;
+//        } else return this.size;
+//    }
+//}
 //            else {
-//                try {
+//                    try {
 //                    return this.right.Rank(value);
-//                } catch (NullPointerException e) {
+//                    } catch (NullPointerException e) {
 //                    if (this.value < value) {
-//                        return this.size + 1;
-//                    } else return this.size;
-//                }
-//            }
+//        return this.size + 1;
+//        } else return this.size;
 //        }
+//        }
+//        }
+
 
     
     protected Node root;
