@@ -1,4 +1,6 @@
+import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Deque;
 import java.util.List;
 
 public class BacktrackingAVL extends AVLTree {
@@ -8,11 +10,14 @@ public class BacktrackingAVL extends AVLTree {
     }
 
 
+
 	//You are to implement the function Backtrack.
     public void Backtrack() {
-        // You should remove the next two lines, after double-checking that the signature is valid!
-        IntegrityStatement.signature(); // Reminder!
-        throw new UnsupportedOperationException("You should implement this");
+        Deque<Integer> CaseStack = new ArrayDeque<Integer>();
+        Deque<Node> RotationsStack = new ArrayDeque<Node>();
+        Deque<Node> InsertedStack = new ArrayDeque<Node>();
+
+
     }
     
     //Change the list returned to a list of integers answering the requirements
