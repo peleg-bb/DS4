@@ -15,28 +15,36 @@ public class BacktrackingAVL extends AVLTree {
 
 	//You are to implement the function Backtrack.
     public void Backtrack() {
-        int caseNum = this.CaseStack.pop();
+        this.CaseStack.pop();
+        int caseNum = this.CaseStack.peek();
         switch (caseNum) {
             case 1:
                 Node popped_C1 = NodeRotatedStack.pop();
                 popped_C1 = rotateLeft(popped_C1);
+                this.CaseStack.pop();
+                break;
 
             case 2:
                 Node popped_C2 = NodeRotatedStack.pop();
                 popped_C2 = rotateLeft(popped_C2);
                 Node popped_C22 = NodeRotatedStack.pop();
                 popped_C22 = rotateRight(popped_C22);
-
+                this.CaseStack.pop();
+                break;
             case 3:
                 Node popped_C3 = NodeRotatedStack.pop();
                 popped_C3 = rotateRight(popped_C3);
-
+                this.CaseStack.pop();
+                break;
             case 4:
                 Node popped_C4 = NodeRotatedStack.pop();
                 popped_C4 = rotateLeft(popped_C4);
                 Node popped_C42 = NodeRotatedStack.pop();
                 popped_C42 = rotateRight(popped_C42);
+                this.CaseStack.pop();
+                break;
         }
+        //if (caseNum < 5) {this.CaseStack.pop();}
         Node toDelete = InsertedStack.pop(); // a leaf
         this.delete(toDelete);
 
