@@ -1,8 +1,4 @@
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Iterator;
+import java.util.*;
 
 public class AVLTree implements Iterable<Integer> {
     // You may edit the following nested class:
@@ -72,29 +68,16 @@ public class AVLTree implements Iterable<Integer> {
         }
 
     } // End of Class Node
-//
-//                try {
-//        return this.left.Rank(value);
-//    } catch (NullPointerException e) {
-//        if (this.value < value) {
-//            return this.size + 1;
-//        } else return this.size;
-//    }
-//}
-//            else {
-//                    try {
-//                    return this.right.Rank(value);
-//                    } catch (NullPointerException e) {
-//                    if (this.value < value) {
-//        return this.size + 1;
-//        } else return this.size;
-//        }
-//        }
-//        }
 
-
-    
     protected Node root;
+    public Deque<Integer> CaseStack = new ArrayDeque<Integer>();
+    // Case 1 - LeftLeft
+    // 2 - LeftRight
+    // 3 - RightRight
+    // 4 - RightLeft
+    // 5- No rotations
+    public Deque<Node> NodeRotatedStack = new ArrayDeque<Node>();
+    public Deque<Node> InsertedStack = new ArrayDeque<Node>();
     
     //You may add fields here.
     
@@ -107,6 +90,8 @@ public class AVLTree implements Iterable<Integer> {
      */
 	public void insert(int value) {
     	root = insertNode(root, value);
+
+
     }
 	
 	protected Node insertNode(Node node, int value) {
@@ -138,26 +123,29 @@ public class AVLTree implements Iterable<Integer> {
          */
         
         int balance = node.getBalanceFactor();
-        
-        if (balance > 1) {
-            if (value > node.left.value) {
+
+        if (balance==1 || balance==0 || balance==-1){
+             CaseStack.push(5);
+        }
+        else if (balance > 1) {
+            if (value > node.left.value) { // LeftRight
                 node.left = rotateLeft(node.left);
                 // CaseStack.push case LeftRight
                 // push node.left
             }
-
             else {
                 // CaseStack.push (case LeftLeft)
             }
             // push node
             node = rotateRight(node);
-        } else if (balance < -1) {
+            NodeRotatedStack.push(node);
+
+        } else if (balance < -1) { //RightLeft
             if (value < node.right.value) {
                 node.right = rotateRight(node.right);
                 // CaseStack.push case RightLeft
                 // push node.right
             }
-
             else{
                 // CaseStack.push case RightRight
             }
