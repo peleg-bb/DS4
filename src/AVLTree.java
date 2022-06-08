@@ -111,6 +111,8 @@ public class AVLTree implements Iterable<Integer> {
 	
 	protected Node insertNode(Node node, int value) {
 	    // Perform regular BST insertion
+
+        // InsertedStack.push(node)
         if (node == null) {
         	Node insertedNode = new Node(value);
             insertedNode.size++;
@@ -140,15 +142,29 @@ public class AVLTree implements Iterable<Integer> {
         if (balance > 1) {
             if (value > node.left.value) {
                 node.left = rotateLeft(node.left);
+                // CaseStack.push case LeftRight
+                // push node.left
             }
-            
+
+            else {
+                // CaseStack.push (case LeftLeft)
+            }
+            // push node
             node = rotateRight(node);
         } else if (balance < -1) {
             if (value < node.right.value) {
                 node.right = rotateRight(node.right);
+                // CaseStack.push case RightLeft
+                // push node.right
             }
-            
+
+            else{
+                // CaseStack.push case RightRight
+            }
+            // push node
             node = rotateLeft(node);
+
+            // stack.push((node)))
         }
 
 
@@ -156,21 +172,21 @@ public class AVLTree implements Iterable<Integer> {
     }
     
 	// You may add additional code to the next two functions.
-    protected Node rotateRight(Node y) {
-        Node x = y.left;
-        Node T2 = x.right;
+    protected Node rotateRight(Node y) { // 78
+        Node x = y.left; // 59
+        Node T2 = x.right; //66
 
         // Perform rotation
-        x.right = y;
-        y.left = T2;
+        x.right = y; // 59.right <- 78
+        y.left = T2; // 78.left <- 66
         
         //Update parents
         if (T2 != null) {
         	T2.parent = y;
         }
 
-        x.parent = y.parent;
-        y.parent = x;
+        x.parent = y.parent; //59.parent = null
+        y.parent = x; // 78.parent = 59
         
         y.updateHeight();
         x.updateHeight();
@@ -181,27 +197,28 @@ public class AVLTree implements Iterable<Integer> {
         return x;
     }
 
-    protected Node rotateLeft(Node x) {
-        Node y = x.right;
-        Node T2 = y.left;
+    protected Node rotateLeft(Node x) { // 59
+        Node y = x.right; // 78
+        Node T2 = y.left; // 66
 
         // Perform rotation
-        y.left = x;
-        x.right = T2;
+        y.left = x; // 78.left = 59
+        x.right = T2; // 59.right = 66
         
         //Update parents
         if (T2 != null) {
-        	T2.parent = x;
+        	T2.parent = x; // 66.parent = 59
         }
         
-        y.parent = x.parent;
-        x.parent = y;
+        y.parent = x.parent; // 78.parent =  null
+        x.parent = y; // 59.parent = 78
         
         x.updateHeight();
         y.updateHeight();
         x.updateSize();
         y.updateSize();
 
+//        59 = 59.rotateLeft(78);
         // Return new root
         return y;
     }
