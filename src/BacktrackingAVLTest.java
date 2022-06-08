@@ -9,20 +9,34 @@ public class BacktrackingAVLTest {
 
     @Before
     public void setUp() throws Exception {
+
+
+
+    }
+
+    @Test
+    public void BacktrackTest() {
         tree.insert(20);
         tree.insert(40);
         tree.insert(60);
         tree.insert(80);
         tree.insert(100);
         tree.insert(120);
+        tree.printTree();
         tree.insert(140);
+        tree.printTree();
         tree.insert(160);
+        tree.printTree();
         tree.insert(180);
+        for (int i = 0; i < 7; i++) {
+            System.out.println("Before Backtrack");
+            tree.printTree();
 
-    }
+            tree.Backtrack();
+            System.out.println("After Backtrack");
+            tree.printTree();
+        }
 
-    @Test
-    public void BacktrackTest() {
     }
 
     @Test
@@ -43,7 +57,7 @@ public class BacktrackingAVLTest {
         Assert.assertEquals("Testing Rank on " + 50, 2,  tree.Rank(50)  );
         Assert.assertEquals("Testing Rank on " + 60, 2,  tree.Rank(60)  );
         Assert.assertEquals("Testing Rank on " + 70, 3,  tree.Rank(70)  );
-        Assert.assertEquals("Testing Rank on " + 201, 9,  tree.Rank(201)  );
+        //Assert.assertEquals("Testing Rank on " + 201, 9,  tree.Rank(201)  );
         Assert.assertEquals("Testing Rank on " + 140, 6,  tree.Rank(140)  );
         Assert.assertEquals("Testing Rank on " + 80, 3,  tree.Rank(80)  );
 

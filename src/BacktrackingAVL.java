@@ -4,6 +4,8 @@ import java.util.Deque;
 import java.util.List;
 
 public class BacktrackingAVL extends AVLTree {
+
+
     // For clarity only, this is the default ctor created implicitly.
     public BacktrackingAVL() {
         super();
@@ -13,11 +15,44 @@ public class BacktrackingAVL extends AVLTree {
 
 	//You are to implement the function Backtrack.
     public void Backtrack() {
-        Deque<Integer> CaseStack = new ArrayDeque<Integer>();
-        Deque<Node> RotationsStack = new ArrayDeque<Node>();
-        Deque<Node> InsertedStack = new ArrayDeque<Node>();
+        int caseNum = this.CaseStack.pop();
+        switch (caseNum) {
+            case 1:
+                Node popped_C1 = NodeRotatedStack.pop();
+                popped_C1 = rotateLeft(popped_C1);
 
+            case 2:
+                Node popped_C2 = NodeRotatedStack.pop();
+                popped_C2 = rotateLeft(popped_C2);
+                Node popped_C22 = NodeRotatedStack.pop();
+                popped_C22 = rotateRight(popped_C22);
 
+            case 3:
+                Node popped_C3 = NodeRotatedStack.pop();
+                popped_C3 = rotateRight(popped_C3);
+
+            case 4:
+                Node popped_C4 = NodeRotatedStack.pop();
+                popped_C4 = rotateLeft(popped_C4);
+                Node popped_C42 = NodeRotatedStack.pop();
+                popped_C42 = rotateRight(popped_C42);
+        }
+        Node toDelete = InsertedStack.pop(); // a leaf
+        this.delete(toDelete);
+
+    }
+
+    public void delete(Node node){
+        if (node.parent == null){
+            this.root = null;
+        }
+        else {
+            if (node.parent.value > node.value) {
+                node.parent.left = null;
+            } else {
+                node.parent.right = null;
+            }
+        }
     }
     
     //Change the list returned to a list of integers answering the requirements
