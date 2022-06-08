@@ -90,22 +90,22 @@ public class AVLTree implements Iterable<Integer> {
      */
 	public void insert(int value) {
     	root = insertNode(root, value);
-
-
+        // the subtree is balanced
+        CaseStack.push(5);
     }
 	
 	protected Node insertNode(Node node, int value) {
 	    // Perform regular BST insertion
-
         // InsertedStack.push(node)
         if (node == null) {
         	Node insertedNode = new Node(value);
+            InsertedStack.push(insertedNode);
             insertedNode.size++;
             return insertedNode;
         }
 
         if (value < node.value) {
-            node.left  = insertNode(node.left, value);
+            node.left = insertNode(node.left, value);
             node.left.parent = node;
         }
         else {
@@ -124,36 +124,36 @@ public class AVLTree implements Iterable<Integer> {
         
         int balance = node.getBalanceFactor();
 
-        if (balance==1 || balance==0 || balance==-1){
-             CaseStack.push(5);
-        }
-        else if (balance > 1) {
+
+        if (balance > 1) {
             if (value > node.left.value) { // LeftRight
                 node.left = rotateLeft(node.left);
-                // CaseStack.push case LeftRight
-                // push node.left
+                CaseStack.push(2); // LeftRight
+                NodeRotatedStack.push(node.left);
             }
             else {
-                // CaseStack.push (case LeftLeft)
+                CaseStack.push(1); // LeftLeft
             }
-            // push node
             node = rotateRight(node);
             NodeRotatedStack.push(node);
-
+            // Case 1 - LeftLeft
+            // 2 - LeftRight
+            // 3 - RightRight
+            // 4 - RightLeft
+            // 5- No rotations
         } else if (balance < -1) { //RightLeft
             if (value < node.right.value) {
                 node.right = rotateRight(node.right);
-                // CaseStack.push case RightLeft
-                // push node.right
+                CaseStack.push(4); // RightLeft
+                NodeRotatedStack.push(node.right);
             }
             else{
-                // CaseStack.push case RightRight
+                CaseStack.push(3); //RightRight
             }
-            // push node
-            node = rotateLeft(node);
-
-            // stack.push((node)))
+            node = rotateLeft(node); //RightRight
+            NodeRotatedStack.push(node);
         }
+
 
 
         return node;
