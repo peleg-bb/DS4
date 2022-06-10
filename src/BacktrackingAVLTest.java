@@ -9,7 +9,16 @@ public class BacktrackingAVLTest {
 
     @Before
     public void setUp() throws Exception {
-
+        tree.insert(20);
+        tree.insert(40);
+        tree.insert(60);
+        tree.insert(80);
+        tree.insert(100);
+        tree.insert(120);
+        tree.insert(140);
+        tree.insert(160);
+        tree.insert(180);
+        tree.insert(200);
 
 
     }
@@ -17,48 +26,6 @@ public class BacktrackingAVLTest {
     @Test
     public void BacktrackTest() {
         tree.insert(10);
-        tree.insert(180);
-        tree.printTree();
-        System.out.println("------------");
-        tree.insert(200);
-        tree.printTree();
-        System.out.println("------------");
-        tree.insert(20);
-        tree.printTree();
-        System.out.println("------------");
-        tree.insert(30);
-        tree.printTree();
-        System.out.println("------------");
-        tree.insert(220);
-        tree.printTree();
-        System.out.println("------------");
-        tree.insert(40);
-        tree.printTree();
-        System.out.println("------------");
-        tree.insert(50);
-        tree.printTree();
-        System.out.println("------------");
-        tree.insert(100);
-        tree.printTree();
-        System.out.println("------------");
-        tree.insert(120);
-        tree.printTree();
-        System.out.println("------------");
-        tree.insert(140);
-        tree.printTree();
-        System.out.println("------------");
-        tree.insert(60);
-        tree.printTree();
-        System.out.println("------------");
-        tree.insert(70);
-        tree.printTree();
-        System.out.println("------------");
-        tree.insert(160);
-        tree.printTree();
-        System.out.println("------------");
-        tree.insert(80);
-        tree.printTree();
-        System.out.println("------------");
 
         for (int i = 0; i < 9; i++) {
             System.out.println("Before Backtrack");
@@ -89,7 +56,7 @@ public class BacktrackingAVLTest {
         Assert.assertEquals("Testing Rank on " + 50, 2,  tree.Rank(50)  );
         Assert.assertEquals("Testing Rank on " + 60, 2,  tree.Rank(60)  );
         Assert.assertEquals("Testing Rank on " + 70, 3,  tree.Rank(70)  );
-        //Assert.assertEquals("Testing Rank on " + 201, 9,  tree.Rank(201)  );
+        Assert.assertEquals("Testing Rank on " + 201, 10,  tree.Rank(201)  );
         Assert.assertEquals("Testing Rank on " + 140, 6,  tree.Rank(140)  );
         Assert.assertEquals("Testing Rank on " + 80, 3,  tree.Rank(80)  );
 
