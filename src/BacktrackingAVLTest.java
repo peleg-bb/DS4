@@ -22,12 +22,12 @@ public class BacktrackingAVLTest {
         tree.insert(80);
         tree.insert(100);
         tree.insert(120);
-        tree.printTree();
-        tree.insert(140);
-        tree.printTree();
-        tree.insert(160);
-        tree.printTree();
-        tree.insert(180);
+//        tree.printTree();
+//        tree.insert(140);
+//        tree.printTree();
+//        tree.insert(160);
+//        tree.printTree();
+//        tree.insert(180);
         for (int i = 0; i < 7; i++) {
             System.out.println("Before Backtrack");
             tree.printTree();

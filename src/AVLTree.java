@@ -90,7 +90,7 @@ public class AVLTree implements Iterable<Integer> {
      */
 	public void insert(int value) {
     	root = insertNode(root, value);
-        // the subtree is balanced
+        // Added
         CaseStack.push(5);
     }
 	

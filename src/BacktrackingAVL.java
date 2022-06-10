@@ -33,7 +33,13 @@ public class BacktrackingAVL extends AVLTree {
                 break;
             case 3:
                 Node popped_C3 = NodeRotatedStack.pop();
-                popped_C3 = rotateRight(popped_C3);
+                try{
+                popped_C3.parent.right = rotateRight(popped_C3);
+                }
+                catch (NullPointerException e){
+                    popped_C3.parent = rotateRight(popped_C3);
+                    this.root = popped_C3.parent;
+                }
                 this.CaseStack.pop();
                 break;
             case 4:
@@ -44,7 +50,6 @@ public class BacktrackingAVL extends AVLTree {
                 this.CaseStack.pop();
                 break;
         }
-        //if (caseNum < 5) {this.CaseStack.pop();}
         Node toDelete = InsertedStack.pop(); // a leaf
         this.delete(toDelete);
 
