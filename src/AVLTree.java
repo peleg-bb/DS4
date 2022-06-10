@@ -185,12 +185,12 @@ public class AVLTree implements Iterable<Integer> {
         return x;
     }
 
-    protected Node rotateLeft(Node x) { // 59
-        Node y = x.right; // 78
-        Node T2 = y.left; // 66
+    protected Node rotateLeft(Node x) { // 20
+        Node y = x.right; // 30
+        Node T2 = y.left; // null
 
         // Perform rotation
-        y.left = x; // 78.left = 59
+        y.left = x; //
         x.right = T2; // 59.right = 66
         
         //Update parents
