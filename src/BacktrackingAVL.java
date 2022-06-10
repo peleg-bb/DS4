@@ -20,31 +20,84 @@ public class BacktrackingAVL extends AVLTree {
         switch (caseNum) {
             case 1:
                 Node popped_C1 = NodeRotatedStack.pop();
-                popped_C1 = rotateLeft(popped_C1);
+                if (popped_C1.parent == null){
+                    this.root = rotateLeft(popped_C1);
+                }
+                else {
+                    popped_C1.parent.left = rotateLeft(popped_C1);
+                }
                 this.CaseStack.pop();
                 break;
 
             case 2:
                 Node popped_C2 = NodeRotatedStack.pop();
-                popped_C2 = rotateLeft(popped_C2);
-                Node popped_C22 = NodeRotatedStack.pop();
-                popped_C22 = rotateRight(popped_C22);
+                if (popped_C2.parent == null) {
+                    this.root.left = rotateLeft(popped_C2);
+                    Node popped_C22 = NodeRotatedStack.pop();
+
+                    if (popped_C22.parent == null) {
+                        this.root.right = rotateRight(popped_C22);
+                    }
+                    else {
+                        popped_C22.parent.right = rotateRight(popped_C22);
+                    }
+                }
+                else {
+
+                    popped_C2.parent.left = rotateLeft(popped_C2);
+                    Node popped_C22 = NodeRotatedStack.pop();
+                    if (popped_C22.parent == null) {
+                        this.root.right = rotateRight(popped_C22);
+                    }
+                    else {
+                        popped_C22.parent.right = rotateRight(popped_C22);
+                    }
+                }
                 this.CaseStack.pop();
                 break;
+
             case 3:
                 Node popped_C3 = NodeRotatedStack.pop();
-                popped_C3 = rotateRight(popped_C3);
+                if (popped_C3.parent == null) {
+                    this.root = rotateRight(popped_C3);
+                }
+                else {
+                    popped_C3.parent.right = rotateRight(popped_C3);
+                }
+//                try{
+//                      popped_C3.parent.right = rotateRight(popped_C3);
+//                }
+//                catch (NullPointerException e){
+//                    popped_C3.parent = rotateRight(popped_C3);
+//                    this.root = popped_C3.parent;
+//                }
                 this.CaseStack.pop();
                 break;
             case 4:
                 Node popped_C4 = NodeRotatedStack.pop();
-                popped_C4 = rotateLeft(popped_C4);
-                Node popped_C42 = NodeRotatedStack.pop();
-                popped_C42 = rotateRight(popped_C42);
+                if (popped_C4.parent == null) {
+                    this.root = rotateRight(popped_C4);
+                    Node popped_C42 = NodeRotatedStack.pop();
+                    if (popped_C42.parent == null) {
+                        this.root = rotateLeft(popped_C42);
+                    }
+                    else {
+                        popped_C42.parent.left = rotateLeft(popped_C42);
+                    }
+                }
+                else {
+                    popped_C4.parent.right = rotateRight(popped_C4);
+                    Node popped_C42 = NodeRotatedStack.pop();
+                    if (popped_C42.parent == null) {
+                        this.root = rotateLeft(popped_C42);
+                    }
+                    else {
+                        popped_C42.parent.left = rotateLeft(popped_C42);
+                    }
+                }
                 this.CaseStack.pop();
                 break;
         }
-        //if (caseNum < 5) {this.CaseStack.pop();}
         Node toDelete = InsertedStack.pop(); // a leaf
         this.delete(toDelete);
 
