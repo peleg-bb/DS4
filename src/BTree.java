@@ -1,5 +1,7 @@
+import java.util.ArrayDeque;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.Deque;
 
 
 @SuppressWarnings("unchecked")
@@ -9,13 +11,17 @@ public class BTree<T extends Comparable<T>> {
 
     protected Node<T> root = null;
     protected int size = 0;
-    
+    public Deque<T> insertedStack = new ArrayDeque<T>();
+    public Deque<T> medianStack = new ArrayDeque<T>();
+    public Deque<Integer> splitStack = new ArrayDeque<Integer>();
+//    public Deque<T> valIdxStack = new ArrayDeque<T>();
+
     //You may add fields here.
 
     /**
      * Default Constructor for a 2-3 B-Tree.
      */
-    public BTree() { 
+    public BTree() {
         this(2);
     }
 
@@ -30,49 +36,67 @@ public class BTree<T extends Comparable<T>> {
         if (order < 2) {
             throw new IllegalArgumentException("Illegal BTree order: " + order);
         }
-        
+
         maxDegree = 2 * order;
+    }
+
+    public int getMaxDegree(){
+        return maxDegree;
     }
 
     //You may add line of code to the "insert" function below.
     /**
      * Insert the value into this BTree
-     * 
+     *
      * @param value - the inserted value
      */
     public void insert(T value) {
+        insertedStack.push(value);
+        splitStack.push(-1);
         if (root == null) {
             root = new Node<T>(null, maxDegree);
             root.addKey(value);
+            splitStack.push(0);
         } else {
             Node<T> currentNode = root;
             boolean wasAdded = false;
+            boolean splitted = false;
             while (currentNode != null && !wasAdded) {
-            	// If the node has 2t-1 keys then split it
+                // If the node has 2t-1 keys then split it
                 if (currentNode.getNumberOfKeys() == maxDegree - 1) {
-                	split(currentNode);
-                	
-                	// Return to the parent and descend to the needed node
-                	currentNode = currentNode.parent != null ? currentNode.parent : root;
+                    splitStack.push(1);
+                    T toPush = split(currentNode);
+                    medianStack.push(toPush);
+                    splitted = true;
+                    // Return to the parent and descend to the needed node
+                    currentNode = currentNode.parent != null ? currentNode.parent : root;
                     int idx = currentNode.getValuePosition(value);
                     currentNode = currentNode.getChild(idx);
                 }
-                
+
+
                 // Descend the tree and add the key to a leaf
                 if (currentNode.isLeaf()) {
-                	currentNode.addKey(value);
-                	wasAdded = true;
+                    currentNode.addKey(value);
+                    wasAdded = true;
                 } else {
                     int idx = currentNode.getValuePosition(value);
                     currentNode = currentNode.getChild(idx);
                 }
             }
+            if(!splitted){
+                splitStack.push(0);
+            }
+//            if(wasAdded){
+//                insertedStack.push(currentNode);
+//                valIdxStack.push(idx);
+//            }
         }
 
         ++size;
-        
+
     }
-    
+
     /**
      * Split a node in its median value
      *
@@ -86,7 +110,7 @@ public class BTree<T extends Comparable<T>> {
         // Create the new nodes
         Node<T> left = createPartialNodeCopy(node, 0, medianIndex);
         Node<T> right = createPartialNodeCopy(node, medianIndex + 1, numberOfKeys);
-        
+
         Node<T> parent = null;
         if (node.parent == null) {
             // create a new root
@@ -98,7 +122,7 @@ public class BTree<T extends Comparable<T>> {
             parent = node.parent;
             parent.removeChild(node);
         }
-        
+
         // Move the median value up to the parent
         parent.addKey(medianValue);
         parent.addChild(left);
@@ -106,9 +130,9 @@ public class BTree<T extends Comparable<T>> {
 
         return medianValue;
     }
-    
+
     /***
-     * 
+     *
      * @param origin - The original node from which we create a partial copy
      * @param startIdx - The start index to copy
      * @param endIdx - The end index to copy
@@ -120,17 +144,17 @@ public class BTree<T extends Comparable<T>> {
         for (int i = startIdx; i < endIdx; ++i) {
             copy.addKey(origin.getKey(i));
         }
-        
+
         if (origin.getNumberOfChildren() > 0) {
             for (int j = startIdx; j <= endIdx; ++j) {
                 Node<T> child = origin.getChild(j);
                 copy.addChild(child);
             }
         }
-        
+
         return copy;
     }
-    
+
 
     /**
      * @param value - a valid value that may be in the tree.
@@ -151,7 +175,7 @@ public class BTree<T extends Comparable<T>> {
     protected Node<T> getNode(T value) {
         Node<T> node = root;
         boolean found = false;
-        
+
         while (node != null && !found) {
             int idx = node.getValuePosition(value);
             if (idx < node.getNumberOfKeys() && node.getKey(idx).compareTo(value) == 0) {
@@ -162,9 +186,11 @@ public class BTree<T extends Comparable<T>> {
                 node = null;
             }
         }
-        
+
         return node;
     }
+
+
 
 
     /**
@@ -178,30 +204,35 @@ public class BTree<T extends Comparable<T>> {
     public String toString() {
         return TreePrinter.getString(this);
     }
-    
+
     protected boolean shouldSplit(Node<T> node) {
         return node.getNumberOfKeys() == maxDegree - 1;
     }
 
     protected static class Node<T extends Comparable<T>> {
 
-    	protected T[] keys = null;
-    	protected int numOfKeys = 0;
-    	protected Node<T>[] children = null;
-    	protected int numOfChildren = 0;
-    	protected Comparator<Node<T>> comparator = new Comparator<Node<T>>() {
+        protected T[] keys = null;
+        protected int numOfKeys = 0;
+        protected Node<T>[] children = null;
+        protected int numOfChildren = 0;
+        protected Comparator<Node<T>> comparator = new Comparator<Node<T>>() {
             public int compare(Node<T> arg0, Node<T> arg1) {
                 return arg0.getKey(0).compareTo(arg1.getKey(0));
             }
         };
 
+
+
+
+
+
         Node<T> parent = null;
 
         public Node(Node<T> parent, int maxDegree) {
-        	if (maxDegree < 4) {
-        		throw new IllegalArgumentException("max degree should be at least 4");
-        	}
-        	
+            if (maxDegree < 4) {
+                throw new IllegalArgumentException("max degree should be at least 4");
+            }
+
             this.parent = parent;
             keys = (T[]) new Comparable[maxDegree - 1];
             numOfKeys = 0;
@@ -215,13 +246,13 @@ public class BTree<T extends Comparable<T>> {
 
         public int indexOf(T value) {
             int index = -1;
-            
+
             for (int i = 0; i < numOfKeys && index < 0; ++i) {
                 if (keys[i].equals(value)) {
                     index = i;
                 }
             }
-            
+
             return index;
         }
 
@@ -238,14 +269,14 @@ public class BTree<T extends Comparable<T>> {
             Arrays.sort(keys, 0, numOfKeys);
         }
 
-        public T removeKey(T value) {        
-            if (numOfKeys == 0) { 
+        public T removeKey(T value) {
+            if (numOfKeys == 0) {
                 return null;
             }
-            
+
             T removed = null;
             boolean found = false;
-            
+
             for (int i = 0; i < numOfKeys; i++) {
                 if (keys[i].equals(value)) {
                     found = true;
@@ -255,9 +286,9 @@ public class BTree<T extends Comparable<T>> {
                     keys[i - 1] = keys[i];
                 }
             }
-            
+
             if (found) {
-            	--numOfKeys;
+                --numOfKeys;
                 keys[numOfKeys] = null;
             }
             return removed;
@@ -271,10 +302,10 @@ public class BTree<T extends Comparable<T>> {
                 // shift the rest of the keys down
                 keys[i - 1] = keys[i];
             }
-            
+
             --numOfKeys;
             keys[numOfKeys] = null;
-            
+
             return value;
         }
 
@@ -285,11 +316,11 @@ public class BTree<T extends Comparable<T>> {
         public Node<T> getChild(int index) {
             return index < numOfChildren ? children[index] : null;
         }
-        
+
         private int getValuePosition(T value) {
             boolean found = false;
             int i = 0;
-            
+
             while(i < getNumberOfKeys() && !found) {
                 if(value.compareTo(getKey(i)) <= 0){
                     found = true;
@@ -297,7 +328,7 @@ public class BTree<T extends Comparable<T>> {
                     ++i;
                 }
             }
-            
+
             return i;
         }
 
@@ -310,7 +341,7 @@ public class BTree<T extends Comparable<T>> {
 
         public boolean removeChild(Node<T> child) {
             boolean found = false;
-            
+
             for (int i = 0; i < numOfChildren; ++i) {
                 if (children[i].equals(child)) {
                     found = true;
@@ -318,12 +349,12 @@ public class BTree<T extends Comparable<T>> {
                     children[i - 1] = children[i];
                 }
             }
-            
+
             if (found) {
                 --numOfChildren;
                 children[numOfChildren] = null;
             }
-            
+
             return found;
         }
 
@@ -336,17 +367,17 @@ public class BTree<T extends Comparable<T>> {
                 // shift the rest of the keys down
                 children[i - 1] = children[i];
             }
-            
+
             --numOfChildren;
             children[numOfChildren] = null;
-            
+
             return value;
         }
 
         public int getNumberOfChildren() {
             return numOfChildren;
         }
-        
+
         public boolean isLeaf() {
             return getNumberOfChildren() == 0;
         }
@@ -407,7 +438,7 @@ public class BTree<T extends Comparable<T>> {
                     Node<T> obj = node.getChild(i);
                     builder.append(getString(obj, prefix + (isTail ? "    " : "|   "), false));
                 }
-                
+
                 if (node.getNumberOfChildren() >= 1) {
                     Node<T> obj = node.getChild(node.getNumberOfChildren() - 1);
                     builder.append(getString(obj, prefix + (isTail ? "    " : "|   "), true));
